@@ -1,7 +1,7 @@
 Homework 2 - Chisel State
 =======================
 
-Adopting our agile mindset, some of these problems revise components introduced in prior homework assignments. Although we provide a skeleton for testers, you will often need to implement them in order to use them. Be sure not to modify external IO interfaces to maintain compatability with the autograder.
+Adopting our agile mindset, some of these problems revise components introduced in prior homework assignments. Although we provide a skeleton for testers, you will need to implement them in order to use them. Be sure not to modify external IO interfaces to maintain compatability with the autograder.
 
 # Problem 1 - Improved ComplexALU (50pts)
 > Let's enhance our `ComplexALU` from HW1 using `Bundle`s and encapsulation. This problem will consist of multiple parts that build from each other. 
@@ -13,8 +13,7 @@ Adopting our agile mindset, some of these problems revise components introduced 
 >    def diffReal(that: ComplexNum): SInt
 >    def diffImag(that: ComplexNum): SInt
 > ``` 
-> The goal of these methods is to overload the `+` and `-` operators so we can easily work with `ComplexNum` in future modules while hiding implementation details. Make sure the arithmetic methods allow for bit growth.
-
+> The goal of these methods is to effectively overload the `+` and `-` operators so we can easily work with `ComplexNum` in future modules while hiding implementation details. Make sure the arithmetic methods allow for bit width growth.
 
 ### Part 2 - ComplexALUIO
 > Implement the `ComplexALUIO` bundle in `src/main/scala/hw2/Complex.scala` by adding three `Input` fields: 
@@ -27,25 +26,27 @@ Adopting our agile mindset, some of these problems revise components introduced 
 >   ```scala
 >   out: ComplexNum
 > ```
-> Ensure the width of `out` allows for bit growth. For help with optional IO see: https://github.com/ucb-bar/chisel3-wiki/blob/master/Cookbook.md.
+> Ensure the width of `out` allows for bit width growth. For help with optional IO see the [cookbook](https://www.chisel-lang.org/chisel3/docs/cookbooks/cookbook.html#how-do-i-create-an-optional-io).
 
 ### Part 3 - ComplexALU 
-> Implement the `ComplexALU` module in `src/main/scala/hw2/Complex.scala` using only the methods defined in `ComplexNum` to perform arithmetic.
->> - if `doAdd` sum the real inputs and sum the imaginary inputs
->> - if not `doAdd` find difference between the real inputs and the difference between the imaginary inputs
->> - if `onlyAdder` only generate logic to sum the real inputs and sum the imaginary inputs. Since we no longer need `doAdd` it should be absent from the Verilog.
+> Implement the `ComplexALU` module in `src/main/scala/hw2/Complex.scala` using only the methods defined in `ComplexNum` to perform arithmetic. It will behave similarly to HW1, except that if the `onlyAdder` parameter is true, the generated hardware will not even include a port for `doAdd`.
+>> - if `doAdd` is high, sum the real inputs and sum the imaginary inputs
+>> - if `doAdd` is low, find difference between the real inputs and the difference between the imaginary inputs
+>> - if `onlyAdder` is true, only generate logic to sum the real inputs and sum the imaginary inputs. Since we no longer need `doAdd`, it should be absent from the Verilog.
+
 
 # Problem 2 - Improved PolyEval (40pts)
-> Let's enhance our `PolyEval` from HW1 to support arbitrary polynomials. Implement the `PolyEval` module in `src/main/scala/hw2/PolyEval.scala`. The `coefs` parameter is a list of coefficients ordered by ascending exponent powers. Return the evaluation in a single cycle. 
+> Let's enhance our `PolyEval` from HW1 to support arbitrary polynomials. Implement the `PolyEval` module in `src/main/scala/hw2/PolyEval.scala`. The `coefs` parameter is a list of coefficients ordered by ascending exponent powers. The generated hardware should produce the result combinatorally (within a cycle). 
 > 
 > For example: 
 > ```
->   Coefs = Seq(0, 1, 2)
+>   coefs = Seq(0, 1, 2)
 >   x = 5
 >   out = 0*x^0 + 1*x^1 + 2*x^2 = 0 + 5 + 50 = 55
 
+
 # Problem 3 - Sine Wave Generator (40pts)
-> Sine waves are useful in DSPs. For this problem, we will implement a sine wave generator (`SinGen`), and over multiple cycles, it will output values for a sine wave. Internally, it will be implemented as a lookup table (ROM with `n` precomputed `sin(x)` values) with a counter. Use the provided `SineWave` code to populate a ROM in the `SinGen` module located in `src/main/scala/hw2/SineWave.scala`. 
+> Sine waves are useful in DSPs, and in this problem, we will implement a sine wave generator (`SinGen`). Over multiple cycles, the generated hardware will produce the output values for a sine wave. Internally, it will track where it is in the period, and use that to index into a lookup table. The lookup table will hold a single period of the sine wave sampled at `n` points, and those precomputed `sin(x)` values will be stored in a ROM. Use the provided `SineWave` code to populate a ROM in the `SinGen` module located in `src/main/scala/hw2/SineWave.scala`. 
 
 ### Part 1 - SinGenIO 
 > Implement the `SinGenIO` bundle in `src/main/scala/hw2/SineWave.scala` by adding two `Input` fields: 
@@ -59,7 +60,7 @@ Adopting our agile mindset, some of these problems revise components introduced 
 > ``` 
 
 ### Part 2 - SinGen 
-> Implement the `SinGen` bundle in `src/main/scala/hw2/SineWave.scala`. Use `SinGenIO` as the module's IO. Each cycle the module will output a new value if `en` is high, or keep returning the same value if `en` is low. The `stride` input determines how much step through the ROM by each cycle.
+> Implement the `SinGen` module in `src/main/scala/hw2/SineWave.scala`. Use `SinGenIO` as the module's IO. Each cycle the module will output the next sample if `en` is high, or keep returning the same sample if `en` is low. The `stride` input determines how many samples to step through the ROM each cycle.
 >> Example given these parameters:
 >> ```scala
 >>     val period = 8
