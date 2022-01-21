@@ -11,7 +11,7 @@ class XORCipherTester extends AnyFlatSpec with ChiselScalatestTester {
 
     behavior of "XORCipher"
     it should "go through common case (empty -> ready -> encrypted -> decrypted -> empty" in {
-        test(new XORCipher(width)) { dut =>
+        test(new XORCipher(width)).withAnnotations(Seq(WriteVcdAnnotation)) { dut =>
             // empty -> ready
             dut.io.state.expect(XORCipher.empty)
             dut.io.in.poke(key.U)
