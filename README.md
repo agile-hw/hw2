@@ -109,7 +109,7 @@ Adopting our agile mindset, some of these problems revise components introduced 
 > - `decypted`: data is stored decrypted
 
 > The state transitions will follow this diagram:
-<img src="fsm.svg" alt="fsm schematic" style="width:30%;margin-left:auto;margin-right:auto"/>
+<img src="fsm.svg" alt="fsm schematic" style="width:50%;margin-left:auto;margin-right:auto"/>
 
 > In general, at most one signal in XORCipherCmds should be high at a time, but use the following precedence order when multiple are high:
 > ```
