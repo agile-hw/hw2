@@ -1,23 +1,23 @@
 package hw2
 
 import chisel3._
-import math.{sin, Pi}
 import chisel3.util.log2Ceil
-import Chisel.log2Up
+
 
 class SineWave(val period: Int, val amplitude: Int) {
     require(period > 0)
-    val B = (2.0 * Pi) / period.toDouble 
-    
+    val B: Double = (2.0 * math.Pi) / period.toDouble
+  
     def apply(x: Double): Int = {
-        (this.amplitude.toDouble * sin(this.B * x)).toInt
+        (amplitude.toDouble * math.sin(B * x)).toInt
     }
 
     def sample(n: Int): Seq[Int] = {
-        val freq = this.period.toDouble / n.toDouble
-        (0 until n).map(x => this.apply(x * freq))
+        val sampleInterval = period.toDouble / n.toDouble
+        (0 until n).map(x => apply(x * sampleInterval))
     }
 }
+
 
 /**
   * 
@@ -30,8 +30,8 @@ class SineWave(val period: Int, val amplitude: Int) {
   */
 class SinGenIO (s: SineWave, n: Int) extends Bundle {
     ???
-    override def cloneType = (new SinGenIO(s, n)).asInstanceOf[this.type]
 }
+
 
 /**
   * 
@@ -41,4 +41,3 @@ class SinGenIO (s: SineWave, n: Int) extends Bundle {
 class SinGen(s: SineWave, n: Int) extends Module {
     val io = ???
 }
-

@@ -2,6 +2,7 @@ package hw2
 
 import chisel3._
 
+
 /**
   * 
   * @param coefs: in ascending exponent order -> Seq(1, 2, 3) == 1 + 2x + 3x^2

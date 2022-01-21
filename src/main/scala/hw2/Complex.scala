@@ -17,7 +17,6 @@ import chisel3._
   */
 class ComplexNum(width: Int) extends Bundle {
     ???
-    override def cloneType = (new ComplexNum(width)).asInstanceOf[this.type]
 }
 
 
@@ -31,17 +30,16 @@ class ComplexNum(width: Int) extends Bundle {
   * @field out: ComplexNum      (Output)
   */
 class ComplexALUIO(width: Int, onlyAdder: Boolean) extends Bundle {
-  ???
-  override def cloneType = (new ComplexALUIO(width, onlyAdder)).asInstanceOf[this.type]
+    ???
 }
+
 
 /**
   * @param width: Int
   * @param onlyAdder: Boolean
   */
 class ComplexALU(width: Int, onlyAdder: Boolean) extends Module {
-  val io = IO(new ComplexALUIO(width, onlyAdder))
-
-  ???
+    val io = IO(new ComplexALUIO(width, onlyAdder))
+    ???
 }
 

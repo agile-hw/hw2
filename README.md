@@ -40,9 +40,9 @@ Adopting our agile mindset, some of these problems revise components introduced 
 > 
 > For example: 
 > ```
->   coefs = Seq(0, 1, 2)
->   x = 5
->   out = 0*x^0 + 1*x^1 + 2*x^2 = 0 + 5 + 50 = 55
+>   coefs = Seq(4, 5, 6)
+>   x = 2
+>   out = 4*x^0 + 5*x^1 + 6*x^2 = 4 + 10 + 24 = 38
 
 
 # Problem 3 - Sine Wave Generator (40pts)
@@ -78,55 +78,43 @@ Adopting our agile mindset, some of these problems revise components introduced 
 
 
 # Problem 4 - XOR Cipher (60pts)
-> The XOR operation is the basis of a simple cryptographic encryption algorithm called an XOR cipher. Given a secret `key` and an input `in` of the same length, we can encrypt `in` by performing `ciphertext = in ^ key`. We can decrypt `ciphertext` by performing `in = ciphertext ^ key`. More details here: https://en.wikipedia.org/wiki/XOR_cipher. 
+> The XOR operation is the basis of a simple cryptographic encryption algorithm called an [XOR cipher](https://en.wikipedia.org/wiki/XOR_cipher). Given a secret `key` and `data` of the same length, we can encrypt `data` by performing `ciphertext = in ^ key`. We can decrypt `ciphertext` by performing `in = ciphertext ^ key`.
 
-> In this problem we will implement an encrypted memory that utilizes a XOR cipher. The contents of memory will always be encrypted, and the user must provide the `key` as an input. Upon reset, the module initializes itself by _cleaning_ its `Mem` by writing `0.U` to each of its `memSize` words. The module will then wait until a command is received. To encode commands, we use the following input signals:
-> - `rst`: clean the memory (different than implicit reset)
-> - `enc`: encrypt `in` with `key` and write the result to memory
-> - `read`: read (ciphertext) from memory and output the data unmodified
-> - `dec`: read from memory and output the data decrypted with `key`
-
-> Note that there is no address input. The memory will always be accessed in its entirety. Each state will cycle through all of the `memSize` words in order, so we must internally track which word we are on.
-
-
-### Part 1 - XORCipherSigs 
-> Implement the `XORCipherCmds` bundle in `src/main/scala/hw2/XORCipher.scala` by adding four `Input` fields: 
-> ```
->   rst:  Bool
->   enc:  Bool
->   read: Bool
->   dec:  Bool
-> ```
+> We will implement a simple XOR cipher. Inside the generated hardware, there will be a register to hold the data (potentially encrypted) and a register to hold the key. We will use a state machine internally to keep track of the status of the system. Upon reset, the system will wait until it is given a secret key to load in. With the secret key stored inside, it is now ready to accept data. When given data, it will encrypt it on the way in. The data can be decrypted, but after a cycle it must be overwritten or zeroed out.
 > 
-> These are the input signals to our FSM.
+> To encode commands, we use the following input signals:
+> - `clear`: zero out both the _data_ and the secret _key_
+> - `loadKey`: store `in` into the secret _key_
+> - `loadAndEnc`: store `in` encrypted (via XOR with the secret _key_) into _data_
+> - `decrypt`: decrypt _data_ with the secret `key`
 
-### Part 2 - XORCipherIO 
-> Implement the `XORCipherIO` bundle in `src/main/scala/hw2/XORCipher.scala` by adding three `Input` fields: 
+### Part 1 - XORCipherIO 
+> Implement the `XORCipherIO` bundle in `src/main/scala/hw2/XORCipher.scala` by adding two `Input` fields: 
 > ```
 >   in:   UInt
->   key:  UInt
 >   cmds: XORCipherCmds
 > ```
-> and two `Output` fields:
+> and four `Output` fields:
 > ```
->   out:   UInt
->   state: UInt
+>   out:       UInt (output of data register)
+>   full:      Bool (data register has valid data)
+>   encrypted: Bool (data register has encrypted data)
+>   state:     UInt (eases testing of FSM)
 
 ### Part 3 - XORCipher
-> Implement the `XORCipher` module in `src/main/scala/hw2/XORCipher.scala` using `XORCipherIO` as the IO. Instantiate a `Mem` with `memSize` words of width `wordSize`. We will build a FSM with five states:
-> - `cleanMem`: write 0.U to each word in Mem over memSize cycles
-> - `ready`: wait until a command is received 
-> - `writeAndEncrypt`: write io.in ^ io.key to each word in Mem over memSize cycles
-> - `readAndDecrypt`: output Mem[word] ^ io.key for each word in Mem over memSize cycles
-> - `readCiphertext`: output Mem[word] for each word in Mem over memSize cycles
+> Implement the `XORCipher` module in `src/main/scala/hw2/XORCipher.scala` using `XORCipherIO` as the IO. We will build a FSM with four states:
+> - `clear`: data and key are both 0
+> - `ready`: secret key is set
+> - `encrypted`: data is stored encrypted
+> - `decypted`: data is stored decrypted
 
 > The state transitions will follow this diagram:
-> ![Alt text](fsm.png?raw=true "Title")
+<img src="fsm.svg" alt="fsm schematic" style="width:30%;margin-left:auto;margin-right:auto"/>
 
-> Whenever the `rst` command is received, the state the next cycle should be `cleanMem`. When other commands are received in states other than `ready`, they can be ignored until the current operation completes. The FSM diagram uses the signal `done` to convey a given operation has completed. You can assume the FSM will go to `ready` for at least one cycle between commands. In the `ready` state, we use the following priorities on our input commands (to ensure our data's security):
+> In general, at most one signal in XORCipherCmds should be high at a time, but use the following precedence order when multiple are high:
 > ```
->   rst > enc > read > dec 
+>   clear > loadKey > loadAndEncrypt > decrypt 
 > ```
-> For example if we are in the `ready` state and both the `enc` and `read` signals are high, we will transition to the `writeAndEncrypt` state.
+> For example, any time `clear` is seen, flush the contents and go to the `empty` state`. If none of the transition conditions are satisfied, remain in the present state.
 
-> You may use the tester located in `src/test/scala/hw2/XORCipherTestSuite.scala` to drive your development.
+> You may use the tester (after filling it in) located in `src/test/scala/hw2/XORCipherTestSuite.scala` to drive your development.

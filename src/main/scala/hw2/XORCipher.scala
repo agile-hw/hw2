@@ -3,39 +3,43 @@ package hw2
 import chisel3._
 import chisel3.util._
 
-/**
-  * @field rst:  Bool
-  * @field enc:  Bool
-  * @field read: Bool
-  * @field dec:  Bool
-  */
+
 class XORCipherCmds extends Bundle {
-    ???
-    override def cloneType = (new XORCipherCmds).asInstanceOf[this.type]
+    val clear      = Input(Bool())
+    val loadKey    = Input(Bool())
+    val loadAndEnc = Input(Bool())
+    val decrypt    = Input(Bool())
 }
 
+
 /**
-  * @param wordSize: Int
-  * @field in:       UInt           (Input)
-  * @field key:      UInt           (Input)
-  * @field cmds:     XORCipherCmds  (Input)
-  * @field out:      UInt           (Output)
-  * @field state:    UInt           (Output)
+  * @param width:     Int
+  * @field in:        UInt           (Input) - payload or key
+  * @field cmds:      XORCipherCmds  (Input)
+  * @field out:       UInt           (Output)
+  * @field full:      Bool           (Output)
+  * @field encrypted: Bool           (Output)
+  * @field state:     UInt           (Output) - visible for testing
   */
-class XORCipherIO(wordSize: Int) extends Bundle {
+class XORCipherIO(width: Int) extends Bundle {
     ???
-    override def cloneType = (new XORCipherIO(wordSize)).asInstanceOf[this.type]
 }
+
 
 object XORCipher {
     // States
-    val cleanMem :: ready :: writeAndEncrypt :: readAndDecrypt :: readCiphertext :: Nil = Enum(5)
+    val empty :: ready :: encrypted :: decrypted :: Nil = Enum(4)
 }
+
+
 /**
-  * @param memSize: Int
-  * @param wordSize: Int
+  * @param width Int
   */
-class XORCipher(memSize: Int, wordSize: Int) extends Module {
-    val io = IO(new XORCipherIO(wordSize))
+class XORCipher(width: Int) extends Module {
+    val io = IO(new XORCipherIO(width))
+    
+    // import state names into namespace
+    import XORCipher._
+    
     ???
 }
