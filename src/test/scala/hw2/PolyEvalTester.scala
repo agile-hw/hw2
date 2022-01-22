@@ -6,7 +6,7 @@ import chisel3._
 import chiseltest._
 import org.scalatest.flatspec.AnyFlatSpec
 
-object PolyEvalBehavior {
+class PolyEvalTester extends AnyFlatSpec with ChiselScalatestTester {
     val width = ???
     def testPolyEvalOut(n: Int): Unit = {
         val coefs = ???
