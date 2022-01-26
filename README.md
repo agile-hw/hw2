@@ -65,7 +65,7 @@ Adopting our agile mindset, some of these problems revise components introduced 
 >> ```scala
 >>     val period = 8
 >>     val amplitude = 128
->>     val n = 36
+>>     val n = 16
 >> ```
 >> If `stride` is `1` then `SinGen` will return one value each cycle in this order:
 >> ```
