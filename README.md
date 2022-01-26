@@ -101,7 +101,7 @@ Adopting our agile mindset, some of these problems revise components introduced 
 >   encrypted: Bool (data register has encrypted data)
 >   state:     UInt (eases testing of FSM)
 
-### Part 3 - XORCipher
+### Part 2 - XORCipher
 > Implement the `XORCipher` module in `src/main/scala/hw2/XORCipher.scala` using `XORCipherIO` as the IO. We will build a FSM with four states:
 > - `clear`: data and key are both 0
 > - `ready`: secret key is set
