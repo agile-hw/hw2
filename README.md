@@ -46,10 +46,12 @@ Adopting our agile mindset, some of these problems revise components introduced 
 
 
 # Problem 3 - Sine Wave Generator (40pts)
-> Sine waves are useful in DSPs, and in this problem, we will implement a sine wave generator (`SinGen`). Over multiple cycles, the generated hardware will produce the output values for a sine wave. Internally, it will track where it is in the period, and use that to index into a lookup table. The lookup table will hold a single period of the sine wave sampled at `n` points, and those precomputed `sin(x)` values will be stored in a ROM. Use the provided `SineWave` code to populate a ROM in the `SinGen` module located in `src/main/scala/hw2/SineWave.scala`. 
+> Sine waves are useful in DSPs, and in this problem, we will implement a sine wave generator (`SineWaveGen`). Over multiple cycles, the generated hardware will produce the output values for a sine wave. Internally, it will track where it is in the period, and use that to index into a lookup table. The lookup table will hold a single period of the sine wave (sin(x)) sampled at `period` points. Thus, due to the periodic nature of a sine wave, a point at _p_ should be the same as a point _p + period_. To assist, we provide `SineWave` (in `src/main/scala/hw2/SineWaveGen.scala`) which represents the sine wave to be turned into a hardware table, and it can also be used as a Scala functional model to get the needed points.
 
-### Part 1 - SinGenIO 
-> Implement the `SinGenIO` bundle in `src/main/scala/hw2/SineWave.scala` by adding two `Input` fields: 
+> Since we are working with UInts instead of floating-point, we use the parameter `amplitude` to scale up the result. The generated hardware will take two inputs (`en` and `stride`). Each cycle the module will output the next sample if `en` is high, or keep returning the same sample if `en` is low. The `stride` input determines how many samples to step through the ROM each cycle. Note, that `stride` may not evenly divide the period.
+
+### Part 1 - SineWaveGenIO 
+> Implement the `SineWaveGenIO` bundle in `src/main/scala/hw2/SineWaveGen.scala` by adding two `Input` fields: 
 > ```scala
 >   stride: UInt
 >   en: Bool
@@ -59,28 +61,27 @@ Adopting our agile mindset, some of these problems revise components introduced 
 >   out: SInt
 > ``` 
 
-### Part 2 - SinGen 
-> Implement the `SinGen` module in `src/main/scala/hw2/SineWave.scala`. Use `SinGenIO` as the module's IO. Each cycle the module will output the next sample if `en` is high, or keep returning the same sample if `en` is low. The `stride` input determines how many samples to step through the ROM each cycle.
+### Part 2 - SineWaveGen 
+> Implement the `SineWaveGen` module in `src/main/scala/hw2/SineWaveGen.scala`, using a `SineWaveGenIO` as the module's IO.
 >> Example given these parameters:
 >> ```scala
->>     val period = 8
+>>     val period = 16
 >>     val amplitude = 128
->>     val n = 16
 >> ```
->> If `stride` is `1` then `SinGen` will return one value each cycle in this order:
+>> If `stride` is `1` then `SineWaveGen` will return one value each cycle in this order:
 >> ```
 >> 0, 48, 90, 118, 128, 118, 90, 48, 0, -48, -90, -118, -128, -118, -90, -48
 >> ```
->> If `stride` is `2` then `SinGen` will return one value each cycle in this order:
+>> If `stride` is `2` then `SineWaveGen` will return one value each cycle in this order:
 >> ```
 >> 0, 90, 128, 90, 0, -90, -128, -90
 >> ```
 
 
 # Problem 4 - XOR Cipher (60pts)
-> The XOR operation is the basis of a simple cryptographic encryption algorithm called an [XOR cipher](https://en.wikipedia.org/wiki/XOR_cipher). Given a secret `key` and `data` of the same length, we can encrypt `data` by performing `ciphertext = in ^ key`. We can decrypt `ciphertext` by performing `in = ciphertext ^ key`.
+> An [XOR cipher](https://en.wikipedia.org/wiki/XOR_cipher) is a simple cryptographic encryption algorithm based on the XOR operation. Given a secret `key` and `data` of the same length, we can encrypt `data` by performing `ciphertext = data ^ key`. We can decrypt `ciphertext` by performing `data = ciphertext ^ key`.
 
-> We will implement a simple XOR cipher. Inside the generated hardware, there will be a register to hold the data (potentially encrypted) and a register to hold the key. We will use a state machine internally to keep track of the status of the system. Upon reset, the system will wait until it is given a secret key to load in. With the secret key stored inside, it is now ready to accept data. When given data, it will encrypt it on the way in. The data can be decrypted, but after a cycle it must be overwritten or zeroed out.
+> We will implement a simple XOR cipher. Inside the generated hardware, there will be a register _data_ to hold the data (potentially encrypted) and a register _key_ to hold the key. We will use a state machine internally to keep track of the status of the system. Upon reset, the system will wait until it is given an input secret key to load in. With the secret key stored held inside  _key_, it is now ready to accept input data. When given input data, it will encrypt it on the way in and store it in _data_ as ciphertext. The ciphertext in _data_ can be decrypted, but after a cycle the decrypted data must be overwritten or zeroed out.
 > 
 > To encode commands, we use the following input signals:
 > - `clear`: zero out both the _data_ and the secret _key_
@@ -103,10 +104,10 @@ Adopting our agile mindset, some of these problems revise components introduced 
 
 ### Part 2 - XORCipher
 > Implement the `XORCipher` module in `src/main/scala/hw2/XORCipher.scala` using `XORCipherIO` as the IO. We will build a FSM with four states:
-> - `clear`: data and key are both 0
-> - `ready`: secret key is set
-> - `encrypted`: data is stored encrypted
-> - `decypted`: data is stored decrypted
+> - `clear`: _data_ and _key_ are both 0 (initial state)
+> - `ready`: secret _key_ is set
+> - `encrypted`: _data_ is filled with ciphertext
+> - `decypted`: _data_ is filled with decrypted data
 
 > The state transitions will follow this diagram:
 <img src="fsm.svg" alt="fsm schematic" style="width:50%;margin-left:auto;margin-right:auto"/>
@@ -115,6 +116,6 @@ Adopting our agile mindset, some of these problems revise components introduced 
 > ```
 >   clear > loadKey > loadAndEncrypt > decrypt 
 > ```
-> For example, any time `clear` is seen, flush the contents and go to the `empty` state`. If none of the transition conditions are satisfied, remain in the present state.
+> For example, any time `clear` is seen, flush the contents and go to the `empty` state. If none of the transition conditions are satisfied, remain in the present state.
 
-> You may use the tester (after filling it in) located in `src/test/scala/hw2/XORCipherTestSuite.scala` to drive your development.
+> We recommend using the tester (after filling it in) located in `src/test/scala/hw2/XORCipherTestSuite.scala` to drive your development.
