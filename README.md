@@ -3,7 +3,7 @@ Homework 2 - Chisel State
 
 Adopting our agile mindset, some of these problems revise components introduced in prior homework assignments. Although we provide a skeleton for testers, you will need to implement them in order to use them. Be sure not to modify external IO interfaces to maintain compatability with the autograder.
 
-# Problem 1 - Improved ComplexALU (50pts)
+# Problem 1 - Improved ComplexALU (15 pts)
 > Let's enhance our `ComplexALU` from HW1 using `Bundle`s and encapsulation. This problem will consist of multiple parts that build from each other. 
 ### Part 1 - ComplexNum 
 > Implement the `ComplexNum` bundle in `src/main/scala/hw2/Complex.scala` by adding two `SInt` fields: `real` and `imag` and four methods with the following signatures:
@@ -35,7 +35,7 @@ Adopting our agile mindset, some of these problems revise components introduced 
 >> - if `onlyAdder` is true, only generate logic to sum the real inputs and sum the imaginary inputs. Since we no longer need `doAdd`, it should be absent from the Verilog.
 
 
-# Problem 2 - Improved PolyEval (40pts)
+# Problem 2 - Improved PolyEval (15 pts)
 > Let's enhance our `PolyEval` from HW1 to support arbitrary polynomials. Implement the `PolyEval` module in `src/main/scala/hw2/PolyEval.scala`. The `coefs` parameter is a list of coefficients ordered by ascending exponent powers. The generated hardware should produce the result combinatorally (within a cycle). 
 > 
 > For example: 
@@ -45,7 +45,7 @@ Adopting our agile mindset, some of these problems revise components introduced 
 >   out = 4*x^0 + 5*x^1 + 6*x^2 = 4 + 10 + 24 = 38
 
 
-# Problem 3 - Sine Wave Generator (40pts)
+# Problem 3 - Sine Wave Generator (30 pts)
 > Sine waves are useful in DSPs, and in this problem, we will implement a sine wave generator (`SineWaveGen`). Over multiple cycles, the generated hardware will produce the output values for a sine wave. Internally, it will track where it is in the period, and use that to index into a lookup table. The lookup table will hold a single period of the sine wave (sin(x)) sampled at `period` points. Thus, due to the periodic nature of a sine wave, a point at _p_ should be the same as a point _p + period_. To assist, we provide `SineWave` (in `src/main/scala/hw2/SineWaveGen.scala`) which represents the sine wave to be turned into a hardware table, and it can also be used as a Scala functional model to get the needed points.
 
 > Since we are working with UInts instead of floating-point, we use the parameter `amplitude` to scale up the result. The generated hardware will take two inputs (`en` and `stride`). Each cycle the module will output the next sample if `en` is high, or keep returning the same sample if `en` is low. The `stride` input determines how many samples to step through the ROM each cycle. Note, that `stride` may not evenly divide the period.
@@ -78,7 +78,7 @@ Adopting our agile mindset, some of these problems revise components introduced 
 >> ```
 
 
-# Problem 4 - XOR Cipher (60pts)
+# Problem 4 - XOR Cipher (40 pts)
 > An [XOR cipher](https://en.wikipedia.org/wiki/XOR_cipher) is a simple cryptographic encryption algorithm based on the XOR operation. Given a secret `key` and `data` of the same length, we can encrypt `data` by performing `ciphertext = data ^ key`. We can decrypt `ciphertext` by performing `data = ciphertext ^ key`.
 
 > We will implement a simple XOR cipher. Inside the generated hardware, there will be a register _data_ to hold the data (potentially encrypted) and a register _key_ to hold the key. We will use a state machine internally to keep track of the status of the system. Upon reset, the system will wait until it is given an input secret key to load in. With the secret key stored held inside  _key_, it is now ready to accept input data. When given input data, it will encrypt it on the way in and store it in _data_ as ciphertext. The ciphertext in _data_ can be decrypted, but after a cycle the decrypted data must be overwritten or zeroed out.

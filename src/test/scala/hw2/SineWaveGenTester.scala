@@ -25,6 +25,10 @@ class SineWaveGenTester extends AnyFlatSpec with ChiselScalatestTester {
         testSineWaveGen(new SineWave(16, 128), 3)
     }
 
+    it should "correctly calculate output for period=10 stride=1" in {
+        testSineWaveGen(new SineWave(10, 128), 1)
+    }
+
     it should "correctly calculate output for period=10 stride=3" in {
         testSineWaveGen(new SineWave(10, 128), 3)
     }
