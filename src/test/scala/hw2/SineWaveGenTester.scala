@@ -2,10 +2,9 @@ package hw2
 
 import chisel3._
 import chisel3.tester._
-import chisel3.tester.RawTester.test
-import chisel3.experimental.BundleLiterals._
+import org.scalatest.flatspec.AnyFlatSpec
 
-object SineWaveGenTester {
+class SineWaveGenTester extends AnyFlatSpec with ChiselScalatestTester {
     def testSineWaveGen(sw: SineWave, stride: Int): Unit = {
         ???
         test(new SineWaveGen(sw)) { dut =>
