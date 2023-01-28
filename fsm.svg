@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns="http://www.w3.org/2000/svg" xmlns:xl="http://www.w3.org/1999/xlink" version="1.1" viewBox="5111.05 5800.05 319.7879 252.9443" width="319.7879" height="252.9443">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xl="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" version="1.1" viewBox="5111.05 5800.05 319.7879 252.9443" width="319.7879" height="252.9443">
   <defs>
     <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="FilledArrow_Marker" stroke-linejoin="miter" stroke-miterlimit="10" viewBox="-1 -4 8 8" markerWidth="8" markerHeight="8" color="black">
       <g>
@@ -8,33 +8,33 @@
       </g>
     </marker>
   </defs>
-  <metadata> Produced by OmniGraffle 7.19.3\n2022-01-21 20:52:30 +0000</metadata>
-  <g id="hw2_-_fsm" fill-opacity="1" stroke="none" stroke-opacity="1" stroke-dasharray="none" fill="none">
+  <metadata> Produced by OmniGraffle 7.21.2\n2023-01-28 17:58:22 +0000</metadata>
+  <g id="hw2_-_fsm" stroke-dasharray="none" stroke="none" stroke-opacity="1" fill-opacity="1" fill="none">
     <title>hw2 - fsm</title>
     <g id="hw2_-_fsm_Layer_1">
       <title>Layer 1</title>
       <g id="Graphic_20">
         <circle cx="5327.495" cy="5856.6344" r="36.0000575244687" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
         <text transform="translate(5309.4336 5849.6344)" fill="#666">
-          <tspan font-family="Menlo" font-size="12" fill="#666" x="0" y="11">ready</tspan>
+          <tspan font-family="Menlo" font-weight="bold" font-size="12" fill="#666" x="0" y="11">ready</tspan>
         </text>
       </g>
       <g id="Graphic_19">
         <circle cx="5171.441" cy="5856.6344" r="36.0000575244687" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
         <text transform="translate(5153.379 5849.6344)" fill="#666">
-          <tspan font-family="Menlo" font-size="12" fill="#666" x="0" y="11">clear</tspan>
+          <tspan font-family="Menlo" font-weight="bold" font-size="12" fill="#666" x="0" y="11">empty</tspan>
         </text>
       </g>
       <g id="Graphic_18">
         <circle cx="5327.495" cy="6016.244" r="36.0000575244686" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
         <text transform="translate(5294.9844 6009.244)" fill="#666">
-          <tspan font-family="Menlo" font-size="12" fill="#666" x="0" y="11">encrypted</tspan>
+          <tspan font-family="Menlo" font-weight="bold" font-size="12" fill="#666" x="0" y="11">encrypted</tspan>
         </text>
       </g>
       <g id="Graphic_17">
         <circle cx="5171.441" cy="6016.244" r="36.0000575244686" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
         <text transform="translate(5138.93 6009.244)" fill="#666">
-          <tspan font-family="Menlo" font-size="12" fill="#666" x="0" y="11">decrypted</tspan>
+          <tspan font-family="Menlo" font-weight="bold" font-size="12" fill="#666" x="0" y="11">decrypted</tspan>
         </text>
       </g>
       <g id="Graphic_15">
@@ -110,6 +110,14 @@
       <g id="Graphic_30">
         <text transform="translate(5169.861 5971.2915) rotate(-31)" fill="#284491">
           <tspan font-family="Menlo" font-size="12" fill="#284491" x="0" y="11">~loadAndEnc</tspan>
+        </text>
+      </g>
+      <g id="Line_31">
+        <line x1="5171.441" y1="5979.494" x2="5171.441" y2="5904.7845" marker-end="url(#FilledArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="miter" stroke-width="1.5"/>
+      </g>
+      <g id="Graphic_32">
+        <text transform="translate(5158 5949.6846) rotate(-90)" fill="#284491">
+          <tspan font-family="Menlo" font-size="12" fill="#284491" x="0" y="11">clear</tspan>
         </text>
       </g>
     </g>
