@@ -1,4 +1,3 @@
-// See README.md for license details.
 package hw2
 
 import chisel3._
@@ -6,7 +5,7 @@ import chisel3._
 // Note ??? will compile but not work at runtime.
 
 /**
-  * @param width: Int
+  * @param width : Int
   * ___________________
   * @field real:  SInt
   * @field imag:  SInt
@@ -16,13 +15,13 @@ import chisel3._
   * @method def diffImag(that: ComplexNum): SInt
   */
 class ComplexNum(width: Int) extends Bundle {
-    ???
+  ???
 }
 
 
 /**
-  * @param width: Int
-  * @param onlyAdder: Boolean
+  * @param width     : Int
+  * @param onlyAdder : Boolean
   * ___________________
   * @field doAdd: Option[Bool]  (Input)
   * @field c0:  ComplexNum      (Input)
@@ -30,16 +29,15 @@ class ComplexNum(width: Int) extends Bundle {
   * @field out: ComplexNum      (Output)
   */
 class ComplexALUIO(width: Int, onlyAdder: Boolean) extends Bundle {
-    ???
+  ???
 }
 
 
 /**
-  * @param width: Int
-  * @param onlyAdder: Boolean
+  * @param width     : Int
+  * @param onlyAdder : Boolean
   */
 class ComplexALU(width: Int, onlyAdder: Boolean) extends Module {
-    val io = IO(new ComplexALUIO(width, onlyAdder))
-    ???
+  val io = IO(new ComplexALUIO(width, onlyAdder))
+  ???
 }
-
